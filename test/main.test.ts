@@ -1,16 +1,19 @@
 import {expect, it} from "vitest"
-import { addNum, subtract, wordsArray } from "../src/ts/main";
+import { wordsArray, getRandomArrayString, getRandomWord} from "../src/ts/main";
 
-it("ads two numbers", () => {
-    let num: number = addNum(12, 90)
 
-    expect(num).toBe(102)
+
+
+it("return a random string from an string array", () => {
+    const array1: string[] = ["1,2,3,4,5,6,7,8,9,0,", "ujnunun", "jijihhui", "udiddhuh"]
+    const randomString: string  = getRandomArrayString(array1)
+
+    expect(array1).toContain(randomString)
 })
 
 
+it("return a random word", () => {
+    const randomWord: string = getRandomWord();
 
-it("subtracts two numbers", () => {
-    let num: number = subtract(12, 2)
-
-    expect(num).toBe(10)
-})
+    expect(wordsArray).toContain(randomWord);
+});
