@@ -1,5 +1,5 @@
 import {expect, it} from "vitest"
-import { addNum, subtract } from "../src/main";
+import { addNum, subtract, wordsArray } from "../src/ts/main";
 
 it("ads two numbers", () => {
     let num: number = addNum(12, 90)

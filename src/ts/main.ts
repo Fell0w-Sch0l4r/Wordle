@@ -1,6 +1,6 @@
-import "./css/tailwind.css";
+import "../css/tailwind.css";
 
-const wordsArray: string[] = [
+export const wordsArray: string[] = [
     "Apple",
     "Basic",
     "Blade",
