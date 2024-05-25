@@ -41,12 +41,12 @@ export const wordsArray: string[] = [
 
 
 
-export function addNum(n1: number, n2: number): number {
-    return n1 + n2
-}
-
-export function subtract(n1: number, n2: number): number{
-    return n1-n2
+export function getRandomArrayString(array: string[]): string{
+    let randomIndex: number = Math.floor(Math.random() * array.length)
+    return array[randomIndex]
 }
 
 
+export function getRandomWord(): string {
+    return getRandomArrayString(wordsArray)
+}
