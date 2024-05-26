@@ -38,7 +38,7 @@ export const wordsArray: string[] = [
 
 const word: string[] = []
 
-const ALFABET: string[] = [
+const ALPHABET: string[] = [
     "a",
     "b",
     "c",
@@ -153,4 +153,9 @@ export function getRandomArrayString(array: string[]): string {
 
 export function getRandomWord(): string {
     return getRandomArrayString(wordsArray);
+}
+
+
+export function isLetter(letter: string): boolean{
+    return ALPHABET.includes(letter)
 }
