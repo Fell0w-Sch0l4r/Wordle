@@ -104,12 +104,12 @@ const cursor: Cursor = {
 };
 
 doc.addEventListener("keypress", (e) => {
-    if (cursor.collum < 5 && "abcdefghijklmnopqrstuvwxyz".includes(e.key)) {
+    if (cursor.collum < 5 && isLetter(e.key)) {
         console.log(e.key);
 
         const letter: string = e.key.toUpperCase();
 
-        textArea.children[cursor.row].children[cursor.collum].textContent = letter;
+        addLetterToTextArea(letter)
 
         word.push(letter)
         console.log(word)
@@ -158,4 +158,9 @@ export function getRandomWord(): string {
 
 export function isLetter(letter: string): boolean{
     return ALPHABET.includes(letter)
+}
+
+
+export function addLetterToTextArea(letter: string):void{
+    textArea.children[cursor.row].children[cursor.collum].textContent = letter;
 }
