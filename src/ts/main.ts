@@ -164,3 +164,15 @@ export function isLetter(letter: string): boolean{
 export function addLetterToTextArea(letter: string):void{
     textArea.children[cursor.row].children[cursor.collum].textContent = letter;
 }
+
+export function incrementCol():void{
+    cursor.collum++
+}
+
+export function incrementRow():void{
+    cursor.row++
+}
+
+export function decrementCol(): void {
+    cursor.collum--;
+}
