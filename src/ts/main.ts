@@ -110,9 +110,9 @@ doc.addEventListener("keypress", submitWord);
 
 doc.addEventListener("keydown", deleteLetter);
 
-const qBtn = document.querySelector("#Q") as HTMLButtonElement;
+// const qBtn = document.querySelector("#Q") as HTMLButtonElement;
 
-qBtn.addEventListener("click", typeButton)
+// qBtn.addEventListener("click", typeButton)
 
 const keyboard = document.querySelector("#keyboard") as HTMLDivElement;
 
