@@ -35,8 +35,7 @@ export const wordsArray: string[] = [
     "BRAID",
 ];
 
-
-const word: string[] = []
+const word: string[] = [];
 
 const ALPHABET: string[] = [
     "a",
@@ -93,7 +92,8 @@ const ALPHABET: string[] = [
     "Z",
 ];
 
-
+const randomWord: string = getRandomWord();
+console.log(randomWord);
 
 const textArea = document.querySelector(".textArea") as HTMLDivElement;
 const doc = document;
@@ -103,48 +103,47 @@ const cursor: Cursor = {
     collum: 0,
 };
 
-doc.addEventListener("keypress", (e) => {
-    if (cursor.collum < 5 && isLetter(e.key)) {
-        console.log(e.key);
+doc.addEventListener("keypress", write);
 
-        const letter: string = e.key.toUpperCase();
+doc.addEventListener("keypress", submitWord);
 
-        addLetterToTextArea(letter)
+doc.addEventListener("keydown", deleteLetter);
 
-        word.push(letter)
-        console.log(word)
-        console.log(word.join(""))
+const qBtn = document.querySelector("#Q") as HTMLButtonElement;
 
-        cursor.collum++;
+qBtn.addEventListener("click", typeButton)
 
-        
-    }
-});
+const keyboard = document.querySelector("#keyboard") as HTMLDivElement;
 
-doc.addEventListener("keypress", (e) => {
-    
-    if(e.key === "Enter" && word.length === 5){
-        if(wordsArray.includes(word.join(""))){
-            cursor.row++
-            cursor.collum = 0
-
-            word.length = 0
-            console.log(word)
+for (const row of keyboard.children) {
+    for (const letter of row.children) {
+        if (letter.id !== "Enter" && letter.id !== "Backspace") {
+            letter.addEventListener("click", typeButton);
         }
     }
-});
+}
 
-doc.addEventListener("keydown", (e) => {
-    if (e.key === "Backspace" && cursor.collum > 0) {
-        cursor.collum--;
+const enterBtn = document.querySelector("#Enter") as HTMLButtonElement;
 
-        textArea.children[cursor.row].children[cursor.collum].textContent = "";
+enterBtn.addEventListener("click", () => {
+    if (rowIsFull()) {
+        colorSquare()
+    }
+})
 
-        word.pop()
-        console.log(word)
+const backSpaceBtn = document.querySelector("#Backspace") as HTMLButtonElement;
+
+backSpaceBtn.addEventListener("click", () => {
+    if (cursor.collum > 0) {
+        decrementCol();
+
+        writeOnTextArea("");
+
+        word.pop();
+        console.log(word);
         console.log(word.join(""));
     }
-});
+})
 
 export function getRandomArrayString(array: string[]): string {
     let randomIndex: number = Math.floor(Math.random() * array.length);
@@ -155,24 +154,118 @@ export function getRandomWord(): string {
     return getRandomArrayString(wordsArray);
 }
 
-
-export function isLetter(letter: string): boolean{
-    return ALPHABET.includes(letter)
+export function isLetter(letter: string): boolean {
+    return ALPHABET.includes(letter);
 }
 
-
-export function addLetterToTextArea(letter: string):void{
+export function writeOnTextArea(letter: string): void {
     textArea.children[cursor.row].children[cursor.collum].textContent = letter;
 }
 
-export function incrementCol():void{
-    cursor.collum++
+export function incrementCol(): void {
+    cursor.collum++;
 }
 
-export function incrementRow():void{
-    cursor.row++
+export function incrementRow(): void {
+    cursor.row++;
 }
 
 export function decrementCol(): void {
     cursor.collum--;
+}
+
+export function resetCol(): void {
+    cursor.collum = 0;
+}
+
+function write(e: KeyboardEvent): void {
+    if (cursor.collum < 5 && isLetter(e.key)) {
+        console.log(e.key);
+
+        const letter: string = e.key.toUpperCase();
+
+        displayLetter(letter);
+    }
+}
+
+function submitWord(e: KeyboardEvent): void {
+    if (e.key === "Enter" && rowIsFull()) {
+        colorSquare()
+    }
+}
+
+function deleteLetter(e: KeyboardEvent): void {
+    if (e.key === "Backspace" && cursor.collum > 0) {
+        decrementCol();
+
+        writeOnTextArea("");
+
+        word.pop();
+        console.log(word);
+        console.log(word.join(""));
+    }
+}
+
+function check(): void {
+    for (let i = 0; i < 5; i++) {
+        if (word[i] === randomWord[i]) {"d";
+            textArea.children[cursor.row].children[i].classList.add(
+                "bg-green-400"
+            );
+        } else if (randomWord.includes(word[i])) {
+            textArea.children[cursor.row].children[i].classList.add(
+                "bg-yellow-600"
+            );
+        } else {
+            textArea.children[cursor.row].children[i].classList.add(
+                "bg-zinc-600"
+            );
+        }
+    }
+}
+
+
+function typeButton(this: HTMLButtonElement): void{
+    if (cursor.collum < 5) {
+        console.log(this.id);
+
+        const letter: string = this.id;
+
+        displayLetter(letter)
+    }
+}
+
+function displayLetter(letter: string): void{
+    writeOnTextArea(letter);
+
+    word.push(letter);
+    console.log(word);
+    console.log(word.join(""));
+
+    incrementCol();
+}
+
+function rowIsFull(): boolean{
+    return word.length === 5;
+}
+
+function colorSquare(): void{
+    if (word.join("") === randomWord) {
+        console.log("Correct");
+        alert("Correct");
+
+        for (const square of textArea.children[cursor.row].children) {
+            square.classList.add("bg-green-400");
+        }
+    } else {
+        console.log("Try again");
+        check();
+
+        alert("Try again");
+        incrementRow();
+        resetCol();
+
+        word.length = 0;
+        console.log(word);
+    }
 }
