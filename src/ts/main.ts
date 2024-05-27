@@ -94,7 +94,7 @@ const ALPHABET: string[] = [
 
 const randomWord: string = getRandomWord();
 console.log(randomWord);
-//alert(randomWord)
+alert(randomWord)
 
 const textArea = document.querySelector(".textArea") as HTMLDivElement;
 const doc = document;
