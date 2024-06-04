@@ -95,15 +95,21 @@ const ALPHABET: string[] = [
     "Z",
 ];
 
-const randomWord: string = getRandomWord();
+let randomWord: string = getRandomWord();
 console.log(randomWord);
 //alert(randomWord)
 
+const playAgainBtn = document.querySelector("#playAgain") as HTMLButtonElement;
+playAgainBtn.addEventListener("click", gameOver);
 
 const textArea = document.querySelector(".textArea") as HTMLDivElement;
 const doc = document;
 
 const cursor: Cursor = {
+    reset() {
+        this.row = 0;
+        this.collum = 0;
+    },
     row: 0,
     collum: 0,
 };
@@ -258,7 +264,7 @@ function updateSquareColors(): void {
     if (word.join("") === randomWord) {
         console.log("Correct");
         //alert("Correct");
-        showNotification("Correct", "green")
+        showNotification("Correct", "green");
 
         let row: HTMLCollection = textArea.children[cursor.row].children;
 
@@ -268,9 +274,12 @@ function updateSquareColors(): void {
         evaluateWordMatch();
 
         //alert("Try again");
-        showNotification("Wrong", "red")
-        incrementRow();
-        resetCol();
+        showNotification("Wrong", "red");
+        if(cursor.row < 5){
+            incrementRow();
+            resetCol();
+        }
+        
 
         word.length = 0;
         console.log(word);
@@ -283,7 +292,7 @@ function markPerfectMatch(row: HTMLCollection): void {
     }
 }
 
-function showNotification(notification: string, color: string): void{
+function showNotification(notification: string, color: string): void {
     Toastify({
         text: notification,
         duration: 2000,
@@ -292,6 +301,33 @@ function showNotification(notification: string, color: string): void{
         position: "center", // `left`, `center` or `right`
         style: {
             background: color,
+            color: "black",
         },
     }).showToast();
+}
+
+function gameOver(): void {
+    randomWord = getRandomWord();
+    console.log(randomWord);
+
+    clearTextArea();
+
+    cursor.reset();
+
+    showNotification("New Game", "yellow");
+}
+function clearTextArea(): void {
+    for (let row = cursor.row; row >= 0; row--) {
+        for (let square of textArea.children[row].children) {
+            square.textContent = "";
+            const squareClasses: string[] = [...square.classList];
+
+            const color: string | undefined = squareClasses.at(-1);
+
+            // Check if color is not undefined before attempting to remove it
+            if (color !== undefined) {
+                square.classList.remove(color);
+            }
+        }
+    }
 }
