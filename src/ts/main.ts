@@ -1,3 +1,4 @@
+import Toastify from "toastify-js";
 import "../css/tailwind.css";
 import { Colors } from "./enums/Colors";
 import { Cursor } from "./types/types";
@@ -129,9 +130,9 @@ const enterBtn = document.querySelector("#Enter") as HTMLButtonElement;
 
 enterBtn.addEventListener("click", () => {
     if (rowIsFull()) {
-        updateSquareColors()
+        updateSquareColors();
     }
-})
+});
 
 const backSpaceBtn = document.querySelector("#Backspace") as HTMLButtonElement;
 
@@ -145,7 +146,7 @@ backSpaceBtn.addEventListener("click", () => {
         console.log(word);
         console.log(word.join(""));
     }
-})
+});
 
 export function getRandomArrayString(array: string[]): string {
     let randomIndex: number = Math.floor(Math.random() * array.length);
@@ -192,7 +193,7 @@ function write(e: KeyboardEvent): void {
 
 function submitWord(e: KeyboardEvent): void {
     if (e.key === "Enter" && rowIsFull()) {
-        updateSquareColors()
+        updateSquareColors();
     }
 }
 
@@ -211,36 +212,33 @@ function deleteLetter(e: KeyboardEvent): void {
 function evaluateWordMatch(): void {
     for (let i = 0; i < 5; i++) {
         if (word[i] === randomWord[i]) {
-
             applyColor(textArea.children[cursor.row].children[i], Colors.GREEN);
-
         } else if (randomWord.includes(word[i])) {
-
-            applyColor(textArea.children[cursor.row].children[i], Colors.YELLOW);
-
+            applyColor(
+                textArea.children[cursor.row].children[i],
+                Colors.YELLOW
+            );
         } else {
-
             applyColor(textArea.children[cursor.row].children[i], Colors.GREY);
         }
     }
 }
 
-export function applyColor(div: Element, color: Colors){
-    div.classList.add(color)
+export function applyColor(div: Element, color: Colors) {
+    div.classList.add(color);
 }
 
-
-function typeButton(this: HTMLButtonElement): void{
+function typeButton(this: HTMLButtonElement): void {
     if (cursor.collum < 5) {
         console.log(this.id);
 
         const letter: string = this.id;
 
-        displayLetter(letter)
+        displayLetter(letter);
     }
 }
 
-function displayLetter(letter: string): void{
+function displayLetter(letter: string): void {
     writeOnTextArea(letter);
 
     word.push(letter);
@@ -250,18 +248,18 @@ function displayLetter(letter: string): void{
     incrementCol();
 }
 
-function rowIsFull(): boolean{
+function rowIsFull(): boolean {
     return word.length === 5;
 }
 
-function updateSquareColors(): void{
+function updateSquareColors(): void {
     if (word.join("") === randomWord) {
         console.log("Correct");
         //alert("Correct");
 
         let row: HTMLCollection = textArea.children[cursor.row].children;
 
-        markPerfectMatch(row)
+        markPerfectMatch(row);
     } else {
         console.log("Try again");
         evaluateWordMatch();
