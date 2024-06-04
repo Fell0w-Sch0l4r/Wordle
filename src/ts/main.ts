@@ -1,4 +1,5 @@
 import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 import "../css/tailwind.css";
 import { Colors } from "./enums/Colors";
 import { Cursor } from "./types/types";
@@ -97,6 +98,7 @@ const ALPHABET: string[] = [
 const randomWord: string = getRandomWord();
 console.log(randomWord);
 //alert(randomWord)
+
 
 const textArea = document.querySelector(".textArea") as HTMLDivElement;
 const doc = document;
@@ -256,6 +258,7 @@ function updateSquareColors(): void {
     if (word.join("") === randomWord) {
         console.log("Correct");
         //alert("Correct");
+        showNotification("Correct", "green")
 
         let row: HTMLCollection = textArea.children[cursor.row].children;
 
@@ -265,6 +268,7 @@ function updateSquareColors(): void {
         evaluateWordMatch();
 
         //alert("Try again");
+        showNotification("Wrong", "red")
         incrementRow();
         resetCol();
 
@@ -277,4 +281,17 @@ function markPerfectMatch(row: HTMLCollection): void {
     for (const square of row) {
         square.classList.add("bg-green-400");
     }
+}
+
+function showNotification(notification: string, color: string): void{
+    Toastify({
+        text: notification,
+        duration: 3000,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        style: {
+            background: color,
+        },
+    }).showToast();
 }
