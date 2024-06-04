@@ -1,5 +1,6 @@
 import {describe, expect, it} from "vitest"
-import { wordsArray, getRandomArrayString, getRandomWord, isLetter} from "../src/ts/main";
+import { wordsArray, getRandomArrayString, getRandomWord, isLetter, applyColor} from "../src/ts/main";
+import { Colors } from "../src/ts/enums/Colors";
 
 
 
@@ -42,5 +43,26 @@ describe("isLetter", () => {
 
     it("should return false for whitespace", () => {
         expect(isLetter(" ")).toBeFalsy();
+    });
+});
+
+
+describe("applyColor", () => {
+    it("adds the correct class for GREEN color", () => {
+        const div = document.createElement("div") as HTMLDivElement;
+        applyColor(div, Colors.GREEN);
+        expect(div.classList.contains(Colors.GREEN)).toBe(true);
+    });
+
+    it("adds the correct class for YELLOW color", () => {
+        const div = document.createElement("div") as HTMLDivElement;
+        applyColor(div, Colors.YELLOW);
+        expect(div.classList.contains(Colors.YELLOW)).toBe(true);
+    });
+
+    it("adds the correct class for ZINC color", () => {
+        const div = document.createElement("div") as HTMLDivElement;
+        applyColor(div, Colors.GREY);
+        expect(div.classList.contains(Colors.GREY)).toBe(true);
     });
 });
