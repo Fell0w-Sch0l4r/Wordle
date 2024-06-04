@@ -286,7 +286,7 @@ function markPerfectMatch(row: HTMLCollection): void {
 function showNotification(notification: string, color: string): void{
     Toastify({
         text: notification,
-        duration: 3000,
+        duration: 2000,
         close: true,
         gravity: "top", // `top` or `bottom`
         position: "center", // `left`, `center` or `right`
