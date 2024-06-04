@@ -11,6 +11,6 @@ export default defineConfig({
     test: {
         // Your Vitest configuration here
         globals: true,
-        environment: "happy-dom",
+        environment: "jsdom",
     },
 });
