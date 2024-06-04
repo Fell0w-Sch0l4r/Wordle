@@ -1,4 +1,5 @@
 import "../css/tailwind.css";
+import { Colors } from "./enums/Colors";
 import { Cursor } from "./types/types";
 
 export const wordsArray: string[] = [
@@ -94,7 +95,7 @@ const ALPHABET: string[] = [
 
 const randomWord: string = getRandomWord();
 console.log(randomWord);
-alert(randomWord)
+//alert(randomWord)
 
 const textArea = document.querySelector(".textArea") as HTMLDivElement;
 const doc = document;
@@ -128,7 +129,7 @@ const enterBtn = document.querySelector("#Enter") as HTMLButtonElement;
 
 enterBtn.addEventListener("click", () => {
     if (rowIsFull()) {
-        colorSquare()
+        updateSquareColors()
     }
 })
 
@@ -191,7 +192,7 @@ function write(e: KeyboardEvent): void {
 
 function submitWord(e: KeyboardEvent): void {
     if (e.key === "Enter" && rowIsFull()) {
-        colorSquare()
+        updateSquareColors()
     }
 }
 
@@ -207,22 +208,25 @@ function deleteLetter(e: KeyboardEvent): void {
     }
 }
 
-function check(): void {
+function evaluateWordMatch(): void {
     for (let i = 0; i < 5; i++) {
-        if (word[i] === randomWord[i]) {"d";
-            textArea.children[cursor.row].children[i].classList.add(
-                "bg-green-400"
-            );
+        if (word[i] === randomWord[i]) {
+
+            applyColor(textArea.children[cursor.row].children[i], Colors.GREEN);
+
         } else if (randomWord.includes(word[i])) {
-            textArea.children[cursor.row].children[i].classList.add(
-                "bg-yellow-600"
-            );
+
+            applyColor(textArea.children[cursor.row].children[i], Colors.YELLOW);
+
         } else {
-            textArea.children[cursor.row].children[i].classList.add(
-                "bg-zinc-600"
-            );
+
+            applyColor(textArea.children[cursor.row].children[i], Colors.GREY);
         }
     }
+}
+
+export function applyColor(div: Element, color: Colors){
+    div.classList.add(color)
 }
 
 
@@ -250,23 +254,29 @@ function rowIsFull(): boolean{
     return word.length === 5;
 }
 
-function colorSquare(): void{
+function updateSquareColors(): void{
     if (word.join("") === randomWord) {
         console.log("Correct");
-        alert("Correct");
+        //alert("Correct");
 
-        for (const square of textArea.children[cursor.row].children) {
-            square.classList.add("bg-green-400");
-        }
+        let row: HTMLCollection = textArea.children[cursor.row].children;
+
+        markPerfectMatch(row)
     } else {
         console.log("Try again");
-        check();
+        evaluateWordMatch();
 
-        alert("Try again");
+        //alert("Try again");
         incrementRow();
         resetCol();
 
         word.length = 0;
         console.log(word);
+    }
+}
+
+function markPerfectMatch(row: HTMLCollection): void {
+    for (const square of row) {
+        square.classList.add("bg-green-400");
     }
 }
