@@ -99,8 +99,10 @@ let randomWord: string = getRandomWord();
 console.log(randomWord);
 //alert(randomWord)
 
+let gameIsOver: boolean = false
+
 const playAgainBtn = document.querySelector("#playAgain") as HTMLButtonElement;
-playAgainBtn.addEventListener("click", gameOver);
+playAgainBtn.addEventListener("click", restartGame);
 
 const textArea = document.querySelector(".textArea") as HTMLDivElement;
 const doc = document;
@@ -137,7 +139,7 @@ for (const row of keyboard.children) {
 const enterBtn = document.querySelector("#Enter") as HTMLButtonElement;
 
 enterBtn.addEventListener("click", () => {
-    if (rowIsFull()) {
+    if (rowIsFull() && !gameIsOver) {
         updateSquareColors();
     }
 });
@@ -145,7 +147,7 @@ enterBtn.addEventListener("click", () => {
 const backSpaceBtn = document.querySelector("#Backspace") as HTMLButtonElement;
 
 backSpaceBtn.addEventListener("click", () => {
-    if (cursor.collum > 0) {
+    if (cursor.collum > 0 && !gameIsOver) {
         decrementCol();
 
         writeOnTextArea("");
@@ -190,7 +192,7 @@ export function resetCol(): void {
 }
 
 function write(e: KeyboardEvent): void {
-    if (cursor.collum < 5 && isLetter(e.key)) {
+    if (cursor.collum < 5 && isLetter(e.key) && !gameIsOver) {
         console.log(e.key);
 
         const letter: string = e.key.toUpperCase();
@@ -200,13 +202,13 @@ function write(e: KeyboardEvent): void {
 }
 
 function submitWord(e: KeyboardEvent): void {
-    if (e.key === "Enter" && rowIsFull()) {
+    if (e.key === "Enter" && rowIsFull() && !gameIsOver) {
         updateSquareColors();
     }
 }
 
 function deleteLetter(e: KeyboardEvent): void {
-    if (e.key === "Backspace" && cursor.collum > 0) {
+    if (e.key === "Backspace" && cursor.collum > 0 && !gameIsOver) {
         decrementCol();
 
         writeOnTextArea("");
@@ -237,7 +239,7 @@ export function applyColor(div: Element, color: Colors) {
 }
 
 function typeButton(this: HTMLButtonElement): void {
-    if (cursor.collum < 5) {
+    if (cursor.collum < 5 && !gameIsOver) {
         console.log(this.id);
 
         const letter: string = this.id;
@@ -266,18 +268,27 @@ function updateSquareColors(): void {
         //alert("Correct");
         showNotification("Correct", "green");
 
-        let row: HTMLCollection = textArea.children[cursor.row].children;
+        let row = textArea.children[cursor.row] as HTMLDivElement;
 
-        markPerfectMatch(row);
+        markPerfectMatch(row)
+        word.length = 0;
+
+        gameIsOver = true
+        playAgainBtn.classList.remove("hidden")
     } else {
-        console.log("Try again");
+        console.log("Wrong");
         evaluateWordMatch();
 
         //alert("Try again");
-        showNotification("Wrong", "red");
+        
         if(cursor.row < 5){
             incrementRow();
             resetCol();
+            showNotification("Wrong", "red");
+        }else{
+            gameIsOver = true
+            showNotification("You Lost", "red")
+            playAgainBtn.classList.remove("hidden");
         }
         
 
@@ -286,10 +297,13 @@ function updateSquareColors(): void {
     }
 }
 
-function markPerfectMatch(row: HTMLCollection): void {
-    for (const square of row) {
-        square.classList.add("bg-green-400");
-    }
+function markPerfectMatch(row: HTMLDivElement): void {
+    forEachChild(row, colorDivGreen);
+    
+}
+
+function colorDivGreen(square: HTMLDivElement): void {
+    applyColor(square, Colors.GREEN);
 }
 
 function showNotification(notification: string, color: string): void {
@@ -306,7 +320,7 @@ function showNotification(notification: string, color: string): void {
     }).showToast();
 }
 
-function gameOver(): void {
+function restartGame(): void {
     randomWord = getRandomWord();
     console.log(randomWord);
 
@@ -315,19 +329,43 @@ function gameOver(): void {
     cursor.reset();
 
     showNotification("New Game", "yellow");
+    gameIsOver = false
+    playAgainBtn.classList.add("hidden");
 }
 function clearTextArea(): void {
     for (let row = cursor.row; row >= 0; row--) {
-        for (let square of textArea.children[row].children) {
-            square.textContent = "";
-            const squareClasses: string[] = [...square.classList];
+        const lettersRow = textArea.children[row] as HTMLDivElement
+        forEachChild(lettersRow, resetSquare);
+    }
+}
 
-            const color: string | undefined = squareClasses.at(-1);
+// Callback function to reset the textContent and remove the last class added to an element
+function resetSquare(element: HTMLDivElement): void {
+    // Set the textContent to an empty string
+    element.textContent = "";
 
-            // Check if color is not undefined before attempting to remove it
-            if (color !== undefined) {
-                square.classList.remove(color);
-            }
+    // Remove the last class added to the element
+    const squareClasses: string[] = [...element.classList];
+    const color: string | undefined = squareClasses.at(-1); // Get the last class
+
+    // Check if color is not undefined before attempting to remove it
+    if (color!== undefined) {
+        element.classList.remove(color);
+    }
+}
+
+
+function forEachChild(
+    element: HTMLDivElement,
+    callback: (child: HTMLDivElement) => void
+): void {
+    // Check if the element has children
+    if (element.children.length > 0) {
+        // Loop through each child node
+        for (let index = 0; index < element.children.length; index++) {
+            const child = element.children[index] as HTMLDivElement
+            // Apply the callback function to each child
+            callback(child);
         }
     }
 }
