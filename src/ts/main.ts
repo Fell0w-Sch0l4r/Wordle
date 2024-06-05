@@ -275,6 +275,7 @@ function updateSquareColors(): void {
 
         gameIsOver = true
         playAgainBtn.classList.remove("hidden")
+        keyboard.classList.add("hidden")
     } else {
         console.log("Wrong");
         evaluateWordMatch();
@@ -289,6 +290,7 @@ function updateSquareColors(): void {
             gameIsOver = true
             showNotification("You Lost", "red")
             playAgainBtn.classList.remove("hidden");
+            keyboard.classList.add("hidden");
         }
         
 
@@ -331,6 +333,7 @@ function restartGame(): void {
     showNotification("New Game", "yellow");
     gameIsOver = false
     playAgainBtn.classList.add("hidden");
+    keyboard.classList.remove("hidden");
 }
 function clearTextArea(): void {
     for (let row = cursor.row; row >= 0; row--) {
