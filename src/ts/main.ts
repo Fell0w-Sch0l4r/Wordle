@@ -225,13 +225,27 @@ function evaluateWordMatch(): void {
     for (let i = 0; i < 5; i++) {
         if (word[i] === randomWord[i]) {
             applyColor(textArea.children[cursor.row].children[i], Colors.GREEN);
+
+            const btnKey = document.querySelector(`#${word[i]}`) as Element
+            removeLastElementClass(btnKey)
+            applyColor(btnKey, Colors.GREEN);
+
         } else if (randomWord.includes(word[i])) {
             applyColor(
                 textArea.children[cursor.row].children[i],
                 Colors.YELLOW
             );
+
+            const btnKey = document.querySelector(`#${word[i]}`) as Element;
+            removeLastElementClass(btnKey);
+            applyColor(btnKey, Colors.YELLOW);
+
         } else {
             applyColor(textArea.children[cursor.row].children[i], Colors.GREY);
+
+            const btnKey = document.querySelector(`#${word[i]}`) as Element;
+            removeLastElementClass(btnKey);
+            applyColor(btnKey, Colors.GREY);
         }
     }
 }
@@ -352,12 +366,16 @@ function resetSquare(element: HTMLDivElement): void {
     // Set the textContent to an empty string
     element.textContent = "";
 
+    removeLastElementClass(element)
+}
+
+function removeLastElementClass(element: Element): void{
     // Remove the last class added to the element
     const squareClasses: string[] = [...element.classList];
     const color: string | undefined = squareClasses.at(-1); // Get the last class
 
     // Check if color is not undefined before attempting to remove it
-    if (color!== undefined) {
+    if (color !== undefined) {
         element.classList.remove(color);
     }
 }
