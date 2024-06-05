@@ -112,10 +112,10 @@ const doc = document;
 const cursor: Cursor = {
     reset() {
         this.row = 0;
-        this.collum = 0;
+        this.collumn = 0;
     },
     row: 0,
-    collum: 0,
+    collumn: 0,
 };
 
 doc.addEventListener("keypress", write);
@@ -149,7 +149,7 @@ enterBtn.addEventListener("click", () => {
 const backSpaceBtn = document.querySelector("#Backspace") as HTMLButtonElement;
 
 backSpaceBtn.addEventListener("click", () => {
-    if (cursor.collum > 0 && !gameIsOver) {
+    if (cursor.collumn > 0 && !gameIsOver) {
         decrementCol();
 
         writeOnTextArea("");
@@ -174,11 +174,11 @@ export function isLetter(letter: string): boolean {
 }
 
 export function writeOnTextArea(letter: string): void {
-    textArea.children[cursor.row].children[cursor.collum].textContent = letter;
+    textArea.children[cursor.row].children[cursor.collumn].textContent = letter;
 }
 
 export function incrementCol(): void {
-    cursor.collum++;
+    cursor.collumn++;
 }
 
 export function incrementRow(): void {
@@ -186,15 +186,15 @@ export function incrementRow(): void {
 }
 
 export function decrementCol(): void {
-    cursor.collum--;
+    cursor.collumn--;
 }
 
 export function resetCol(): void {
-    cursor.collum = 0;
+    cursor.collumn = 0;
 }
 
 function write(e: KeyboardEvent): void {
-    if (cursor.collum < 5 && isLetter(e.key) && !gameIsOver) {
+    if (cursor.collumn < 5 && isLetter(e.key) && !gameIsOver) {
         console.log(e.key);
 
         const letter: string = e.key.toUpperCase();
@@ -210,7 +210,7 @@ function submitWord(e: KeyboardEvent): void {
 }
 
 function deleteLetter(e: KeyboardEvent): void {
-    if (e.key === "Backspace" && cursor.collum > 0 && !gameIsOver) {
+    if (e.key === "Backspace" && cursor.collumn > 0 && !gameIsOver) {
         decrementCol();
 
         writeOnTextArea("");
@@ -255,7 +255,7 @@ export function applyColor(div: Element, color: Colors) {
 }
 
 function typeButton(this: HTMLButtonElement): void {
-    if (cursor.collum < 5 && !gameIsOver) {
+    if (cursor.collumn < 5 && !gameIsOver) {
         console.log(this.id);
 
         const letter: string = this.id;
