@@ -345,6 +345,7 @@ function restartGame(): void {
     console.log(randomWord);
 
     clearTextArea();
+    resetKeyboardColors()
 
     cursor.reset();
 
@@ -359,6 +360,18 @@ function clearTextArea(): void {
         const lettersRow = textArea.children[row] as HTMLDivElement
         forEachChild(lettersRow, resetSquare);
     }
+}
+
+function resetKeyboardColors(): void{
+    for(let index = 0; index < 3; index++){
+        const row = keyboard.children[index] as HTMLDivElement
+        forEachChild(row, resetBtnKeyColor)
+    }
+}
+
+function resetBtnKeyColor(btn: Element): void{
+    removeLastElementClass(btn);
+    btn.classList.add("bg-zinc-500")
 }
 
 // Callback function to reset the textContent and remove the last class added to an element
