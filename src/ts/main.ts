@@ -101,6 +101,8 @@ console.log(randomWord);
 
 let gameIsOver: boolean = false
 
+const rightWord = document.querySelector("#word") as HTMLHeadElement;
+
 const playAgainBtn = document.querySelector("#playAgain") as HTMLButtonElement;
 playAgainBtn.addEventListener("click", restartGame);
 
@@ -276,6 +278,7 @@ function updateSquareColors(): void {
         gameIsOver = true
         playAgainBtn.classList.remove("hidden")
         keyboard.classList.add("hidden")
+        showRightWord()
     } else {
         console.log("Wrong");
         evaluateWordMatch();
@@ -291,6 +294,7 @@ function updateSquareColors(): void {
             showNotification("You Lost", "red")
             playAgainBtn.classList.remove("hidden");
             keyboard.classList.add("hidden");
+            showRightWord()
         }
         
 
@@ -334,6 +338,7 @@ function restartGame(): void {
     gameIsOver = false
     playAgainBtn.classList.add("hidden");
     keyboard.classList.remove("hidden");
+    hideRightWord()
 }
 function clearTextArea(): void {
     for (let row = cursor.row; row >= 0; row--) {
@@ -371,4 +376,13 @@ function forEachChild(
             callback(child);
         }
     }
+}
+
+function showRightWord(){
+    rightWord.textContent = randomWord
+    
+}
+
+function hideRightWord() {
+    rightWord.textContent = ""
 }
